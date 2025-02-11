@@ -150,13 +150,15 @@ export default function Home() {
     const signer = new ethers.JsonRpcSigner(provider, address);
     console.log({ provider, address, signer });
     const contract = new ethers.Contract(
-      "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+      "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       abi,
       signer
     );
     // const ctr = await contract.connect(provider);
 
-    const result = await contract.approve(address, 1000);
+    const result = await contract.approve(address, 10000000);
+
+    setResult(result);
 
     console.log({ provider, address, contract, result });
   };
