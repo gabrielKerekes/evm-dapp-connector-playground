@@ -1,9 +1,7 @@
 import { ethers } from "ethers";
 import { NetworkParams } from "../../constants";
-import { Button } from "../../components/Button";
 import { addNetwork } from "./AddNetwork";
 import { NetworkSelect } from "./NetworkSelect";
-import { useEffect, useState } from "react";
 
 type SwitchNetworkProps = {
   network: NetworkParams;
