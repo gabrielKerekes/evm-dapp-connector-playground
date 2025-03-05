@@ -22,11 +22,16 @@ export const ApproveToken = ({
 }: ApproveTokenProps) => {
   const [amount, setAmount] = useState<string>("123");
   const [token, setToken] = useState<string>(network.usdcAddress);
+  const [spender, setSpender] = useState<string>(address);
   const [explorerLink, setExplorerLink] = useState<string>("");
 
   useEffect(() => {
     setToken(network.usdcAddress);
   }, [network]);
+
+  useEffect(() => {
+    setSpender(address);
+  }, [address]);
 
   const approve = async () => {
     setExplorerLink("");
@@ -45,7 +50,7 @@ export const ApproveToken = ({
 
       addLog({ type: "approve", message: `amount: ${rawAmount}` });
 
-      const result = await contract.approve(address, rawAmount);
+      const result = await contract.approve(spender, rawAmount);
       addLog({ type: "approve", message: `result: ${result}` });
       const explorerLink =
         network.blockExplorerUrls?.length > 0
@@ -68,8 +73,17 @@ export const ApproveToken = ({
   return (
     <div className="flex flex-col gap-4 p-4 bg-gray-50 rounded-lg">
       <h3 className="text-lg font-bold">Approve Token</h3>
+      <Input
+        label="Token (defaults to USDC if known for the network)"
+        value={token}
+        onChange={setToken}
+      />
+      <Input
+        label="Spender (defaults to wallet address)"
+        value={spender}
+        onChange={setSpender}
+      />
       <Input label="Approval Amount" value={amount} onChange={setAmount} />
-      <Input label="Token" value={token} onChange={setToken} />
       <Button label="Approve" onClick={() => approve()} disabled={!provider} />
       {explorerLink && (
         <a
