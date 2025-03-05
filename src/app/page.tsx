@@ -2,92 +2,48 @@
 
 import { ethers } from "ethers";
 import { useState } from "react";
+import { chainPresets, erc20Abi, NetworkParams } from "./constants";
+import { Button } from "./Button";
+import { Input } from "./Input";
+import { NetworkModal } from "./NetworkModal";
+import { GithubIcon } from "./icons/GithubIcon";
+import { TwitterIcon } from "./icons/TwitterIcon";
+import { NufiIcon } from "./icons/NufiIcon";
 
 const getProvider = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (window as any).ethereum;
 };
 
-const abi = [
-  "function name() public view returns (string)",
-  "function symbol() public view returns (string)",
-  "function decimals() public view returns (uint8)",
-  "function totalSupply() public view returns (uint256)",
-  "function approve(address _spender, uint256 _value) public returns (bool success)",
-];
-
-const chainPresets = {
-  arbitrumOne: {
-    chainId: "0xa4b1",
-    rpcUrls: ["https://arbitrum.llamarpc.com"],
-    chainName: "Arbitrum One",
-    nativeCurrency: {
-      name: "ETH",
-      decimals: 18,
-      symbol: "ETH",
-    },
-    blockExplorerUrls: ["https://arbiscan.io/"],
-    iconUrls: [],
-  },
-  mode: {
-    chainId: "0x868b",
-    rpcUrls: ["https://1rpc.io/mode"],
-    chainName: "Mode",
-    nativeCurrency: {
-      name: "ETH",
-      decimals: 18,
-      symbol: "ETH",
-    },
-    blockExplorerUrls: ["https://explorer.mode.network/"],
-    iconUrls: [],
-  },
-  bahamut: {
-    chainId: "0x142d",
-    rpcUrls: ["https://rpc1.bahamut.io"],
-    chainName: "Bahamut",
-    nativeCurrency: {
-      name: "ETH",
-      decimals: 18,
-      symbol: "FTN",
-    },
-    blockExplorerUrls: ["https://www.ftnscan.com/"],
-    iconUrls: [],
-  },
-};
-
 export default function Home() {
-  const [networkParams, setNetworkParams] = useState(chainPresets.arbitrumOne);
+  const [currentNetwork, setCurrentNetwork] = useState<NetworkParams>(
+    chainPresets.ethereum
+  );
+  const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [approvalAmount, setApprovalAmount] = useState<string>("123");
+  const [logs, setLogs] = useState<any[]>([]);
+  const [connectedAccount, setConnectedAccount] = useState<string>("");
 
-  const [eventsEmitted, setEventsEmitted] = useState<any[]>([]);
+  const addLog = ({ type, message }: { type: string; message: any }) => {
+    console.log("Log:", { type, message });
+    setLogs((prev) => [...prev, { type, message }]);
+  };
 
   const onChainChanged = (message: any) => {
-    console.log("chainChanged", { message });
-    setEventsEmitted((prev) => [
-      ...prev,
-      {
-        type: "chainChanged",
-        message,
-        chainName: Object.values(chainPresets).find(
-          (chainData) => chainData.chainId === message
-        )?.chainName,
-      },
-    ]);
+    addLog({ type: "chainChanged", message });
   };
 
-  const onAccountsChanged = (message: any) => {
-    console.log("accountsChanged", { message });
-    setEventsEmitted((prev) => [...prev, { type: "accountsChanged", message }]);
+  const onAccountsChanged = (message: string) => {
+    addLog({ type: "accountsChanged", message });
   };
 
-  const onDisconnect = (message: any) => {
-    console.log("disconnect", { message });
-    setEventsEmitted((prev) => [...prev, { type: "disconnect", message }]);
+  const onDisconnect = (message: string) => {
+    addLog({ type: "disconnect", message });
   };
 
-  const onConnect = (message: any) => {
-    console.log("connect", { message });
-    setEventsEmitted((prev) => [...prev, { type: "connect", message }]);
+  const onConnect = (message: string) => {
+    addLog({ type: "connect", message });
   };
 
   const connect = async () => {
@@ -99,7 +55,9 @@ export default function Home() {
       provider.removeListener("connect", onConnect);
     }
 
-    provider.enable();
+    await provider.enable();
+    const accounts = await getAccounts();
+    setConnectedAccount(accounts[0]);
 
     provider.on("chainChanged", onChainChanged);
     provider.on("accountsChanged", onAccountsChanged);
@@ -113,160 +71,132 @@ export default function Home() {
     const accounts = await getProvider().request({
       method: "eth_requestAccounts",
     });
+    addLog({ type: "getAccounts", message: `accounts: ${accounts}` });
     setResult(accounts);
+    setConnectedAccount(accounts[0]);
     return accounts;
   };
-  const switchNetwork = async () => {
+
+  const switchNetwork = async (networkParams: NetworkParams) => {
     try {
+      addLog({
+        type: "switchNetwork",
+        message: `${networkParams.chainName} (${networkParams.chainId})`,
+      });
       const result = await getProvider().request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: networkParams.chainId }],
       });
       setResult(result);
+      setCurrentNetwork(networkParams);
     } catch (error) {
-      console.log(error);
+      addLog({
+        type: "switchNetwork",
+        message: `error: ${JSON.stringify(error)}`,
+      });
       // https://docs.metamask.io/wallet/reference/json-rpc-methods/wallet_switchethereumchain/
       if (error.code === 4902) {
-        console.log("chain not found, adding network");
-        await addNetwork();
+        await addNetwork(networkParams);
       } else {
         setResult(error);
         throw error;
       }
+    } finally {
+      setIsNetworkModalOpen(false);
     }
   };
-  // todo test what happens with metamask if some data are not defined
-  const addNetwork = async () => {
+
+  const addNetwork = async (networkParams: NetworkParams) => {
+    addLog({
+      type: "addNetwork",
+      message: `${networkParams.chainName} (${networkParams.chainId})`,
+    });
     const result = await getProvider().request({
       method: "wallet_addEthereumChain",
       params: [networkParams],
     });
     setResult(result);
+    setCurrentNetwork(networkParams);
+    setIsNetworkModalOpen(false);
   };
 
   const approve = async () => {
     const provider = new ethers.BrowserProvider(await getProvider());
     const address = (await getAccounts())![0];
     const signer = new ethers.JsonRpcSigner(provider, address);
-    console.log({ provider, address, signer });
+
     const contract = new ethers.Contract(
-      "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-      abi,
+      currentNetwork.usdcAddress,
+      erc20Abi,
       signer
     );
-    // const ctr = await contract.connect(provider);
 
-    const result = await contract.approve(address, 10000000);
+    const decimals = await contract.decimals();
+    const amount = ethers.parseUnits(approvalAmount, decimals);
+
+    addLog({ type: "approve", message: `amount: ${amount}` });
+
+    const result = await contract.approve(address, amount);
+
+    addLog({ type: "approve", message: `result: ${result}` });
 
     setResult(result);
-
-    console.log({ provider, address, contract, result });
   };
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <div className="grid grid-cols-3 gap-4 w-full">
-          <div className="flex flex-col gap-4">
-            <h3 className="text-lg font-bold">Chain params</h3>
-            <select
-              id="countries"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              onChange={(e) =>
-                setNetworkParams(
-                  chainPresets[e.target.value as keyof typeof chainPresets]
-                )
-              }
-              defaultValue={networkParams.chainName}
-            >
-              {Object.keys(chainPresets).map((chain) => (
-                <option key={chain} value={chain}>
-                  {chainPresets[chain].chainName}
-                </option>
-              ))}
-            </select>
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              value={networkParams.chainId}
-              onChange={(e) =>
-                setNetworkParams({ ...networkParams, chainId: e.target.value })
-              }
+    <>
+      <div className="min-h-screen grid grid-rows-[auto_1fr_auto]">
+        <header className="row-start-1 w-full flex justify-between items-center gap-4 p-4 bg-gray-100">
+          <h1 className="text-2xl font-bold">NuFi EVM test dApp</h1>
+          <div className="flex gap-4">
+            <Button
+              label={`Network: ${currentNetwork.chainName} (${currentNetwork.chainId})`}
+              onClick={() => setIsNetworkModalOpen(true)}
             />
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              value={networkParams.rpcUrls}
-              onChange={(e) =>
-                setNetworkParams({
-                  ...networkParams,
-                  rpcUrls: [e.target.value],
-                })
+            <Button
+              label={
+                connectedAccount
+                  ? `Connected: ${connectedAccount.slice(
+                      0,
+                      6
+                    )}...${connectedAccount.slice(-4)}`
+                  : "Connect"
               }
-            />
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              value={networkParams.chainName}
-              onChange={(e) =>
-                setNetworkParams({
-                  ...networkParams,
-                  chainName: e.target.value,
-                })
-              }
-            />
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              value={networkParams.blockExplorerUrls}
-              onChange={(e) =>
-                setNetworkParams({
-                  ...networkParams,
-                  blockExplorerUrls: [e.target.value],
-                })
-              }
-            />
-          </div>
-
-          <div className="flex flex-col gap-4">
-            <h3 className="text-lg font-bold">Actions</h3>
-
-            <button
-              className="bg-blue-500 text-white p-2 rounded-md"
               onClick={() => connect()}
-            >
-              Connect
-            </button>
-            <button
-              className="bg-blue-500 text-white p-2 rounded-md"
-              onClick={() => getAccounts()}
-            >
-              Get Accounts
-            </button>
-            <button
-              className="bg-blue-500 text-white p-2 rounded-md"
-              onClick={() => switchNetwork()}
-            >
-              Switch Network
-            </button>
-            <button
-              className="bg-blue-500 text-white p-2 rounded-md"
-              onClick={() => addNetwork()}
-            >
-              Add Network
-            </button>
-            <button
-              className="bg-blue-500 text-white p-2 rounded-md"
-              onClick={() => approve()}
-            >
-              Approve
-            </button>
+            />
+          </div>
+        </header>
+
+        <NetworkModal
+          isOpen={isNetworkModalOpen}
+          onClose={() => setIsNetworkModalOpen(false)}
+          initialNetworkParams={currentNetwork}
+          onSwitchNetwork={switchNetwork}
+          onAddNetwork={addNetwork}
+        />
+
+        <main className="flex flex-col gap-8 items-center sm:items-start p-8 bg-white">
+          <div className="grid grid-cols-4 gap-4 w-full">
+            <div className="flex flex-col gap-4 p-4 bg-gray-50 rounded-lg">
+              <h3 className="text-lg font-bold">Get Accounts</h3>
+              <Button label="Get Accounts" onClick={() => getAccounts()} />
+            </div>
+
+            <div className="flex flex-col gap-4 p-4 bg-gray-50 rounded-lg">
+              <h3 className="text-lg font-bold">Approve USDC</h3>
+              <Input
+                label="Approval Amount"
+                value={approvalAmount}
+                onChange={setApprovalAmount}
+              />
+              <Button label="Approve" onClick={() => approve()} />
+            </div>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="p-4 bg-gray-50 rounded-lg w-full">
             <h3 className="text-lg font-bold">Events Emitted</h3>
-            <div className="flex flex-col gap-2">
-              {eventsEmitted.map((event, index) => (
+            <div className="flex flex-col gap-2 mt-2">
+              {logs.map((event, index) => (
                 <div key={index}>
                   {event.type}: {event.message}{" "}
                   {event.chainName ? `(${event.chainName})` : ""}
@@ -274,11 +204,39 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </div>
 
-        <h3 className="text-lg font-bold">Result: {JSON.stringify(result)}</h3>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer>
-    </div>
+          <div className="p-4 bg-gray-50 rounded-lg w-full">
+            <h3 className="text-lg font-bold">Result</h3>
+            <pre className="mt-2">{JSON.stringify(result, null, 2)}</pre>
+          </div>
+        </main>
+        <footer className="flex gap-6 flex-wrap items-center justify-center p-4 bg-gray-100">
+          <a
+            href="https://nu.fi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-600 hover:text-gray-900"
+          >
+            <NufiIcon />
+          </a>
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-600 hover:text-gray-900"
+          >
+            <GithubIcon />
+          </a>
+          <a
+            href="https://x.com/nufiwallet"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-600 hover:text-gray-900"
+          >
+            <TwitterIcon />
+          </a>
+        </footer>
+      </div>
+    </>
   );
 }
