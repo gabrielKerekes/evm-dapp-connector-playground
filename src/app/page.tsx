@@ -12,6 +12,7 @@ import { ApproveToken } from "./actions/ApproveToken";
 import { LogsContainer } from "./components/LogsContainer";
 import { AddNetwork, SwitchNetwork } from "./actions/network";
 import { GetAccounts } from "./actions/GetAccounts";
+import { ActionWrapper } from "./components/ActionWrapper";
 
 const getProvider = () => {
   return (window as any).ethereum;
@@ -80,7 +81,7 @@ export default function Home() {
   return (
     <>
       <div className="min-h-screen grid grid-rows-[auto_1fr_auto]">
-        <header className="row-start-1 w-full flex justify-between items-center gap-4 p-4 bg-gray-100">
+        <header className="row-start-1 w-full flex justify-between items-center gap-4 p-4 bg-gray-100 dark:bg-gray-900">
           <h1 className="text-2xl font-bold">
             NuFi EVM dapp connector playground
           </h1>
@@ -120,7 +121,7 @@ export default function Home() {
           />
         )}
 
-        <main className="flex flex-col gap-8 items-center sm:items-start p-8 bg-white">
+        <main className="flex flex-col gap-8 items-center sm:items-start p-8 bg-white dark:bg-gray-900">
           <div className="grid grid-cols-4 gap-4 w-full">
             <SwitchNetwork
               network={currentNetwork}
@@ -150,12 +151,12 @@ export default function Home() {
 
           <LogsContainer logs={logs} />
 
-          <div className="p-4 bg-gray-50 rounded-lg w-full">
+          <ActionWrapper className="w-full">
             <h3 className="text-lg font-bold">Result</h3>
             <pre className="mt-2">{JSON.stringify(result, null, 2)}</pre>
-          </div>
+          </ActionWrapper>
         </main>
-        <footer className="flex gap-6 flex-wrap items-center justify-center p-4 bg-gray-100">
+        <footer className="flex gap-6 flex-wrap items-center justify-center p-4 bg-gray-100 dark:bg-gray-900">
           <a
             href="https://nu.fi"
             target="_blank"

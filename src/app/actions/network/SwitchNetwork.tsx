@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import { NetworkParams } from "../../constants";
 import { addNetwork } from "./AddNetwork";
 import { NetworkSelect } from "./NetworkSelect";
+import { ActionWrapper } from "@/app/components/ActionWrapper";
 
 type SwitchNetworkProps = {
   network: NetworkParams;
@@ -65,7 +66,7 @@ export const SwitchNetwork = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 bg-gray-50 rounded-lg">
+    <ActionWrapper>
       <h3 className="text-lg font-bold">Switch Network</h3>
 
       <NetworkSelect
@@ -73,6 +74,6 @@ export const SwitchNetwork = ({
         onChange={handleSwitchNetwork}
         className="mb-4"
       />
-    </div>
+    </ActionWrapper>
   );
 };

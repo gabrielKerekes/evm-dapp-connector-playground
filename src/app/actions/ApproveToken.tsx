@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import { erc20Abi, NetworkParams } from "../constants";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
+import { ActionWrapper } from "../components/ActionWrapper";
 
 type ApproveTokenProps = {
   network: NetworkParams;
@@ -71,8 +72,8 @@ export const ApproveToken = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 bg-gray-50 rounded-lg">
-      <h3 className="text-lg font-bold">Approve Token</h3>
+    <ActionWrapper>
+      <h3 className="text-lg font-bold ">Approve Token</h3>
       <Input
         label="Token (defaults to USDC if known for the network)"
         value={token}
@@ -95,6 +96,6 @@ export const ApproveToken = ({
           View transaction on explorer
         </a>
       )}
-    </div>
+    </ActionWrapper>
   );
 };

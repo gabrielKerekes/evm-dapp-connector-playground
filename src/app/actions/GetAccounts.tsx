@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import { Button } from "../components/Button";
+import { ActionWrapper } from "../components/ActionWrapper";
 
 type GetAccountsProps = {
   provider: ethers.BrowserProvider | null;
@@ -32,13 +33,13 @@ export const GetAccounts = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 bg-gray-50 rounded-lg">
+    <ActionWrapper>
       <h3 className="text-lg font-bold">Get Accounts</h3>
       <Button
         label="Get Accounts"
         onClick={() => getAccounts()}
         disabled={!provider}
       />
-    </div>
+    </ActionWrapper>
   );
 };

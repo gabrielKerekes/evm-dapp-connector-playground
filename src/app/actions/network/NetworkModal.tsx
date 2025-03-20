@@ -2,6 +2,7 @@ import { NetworkParams } from "../../constants";
 import { SwitchNetwork } from "./SwitchNetwork";
 import { AddNetwork } from "./AddNetwork";
 import { ethers } from "ethers";
+import { ActionWrapper } from "@/app/components/ActionWrapper";
 
 interface NetworkModalProps {
   onClose: () => void;
@@ -22,7 +23,7 @@ export function NetworkModal({
 }: NetworkModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg w-96 flex flex-col gap-2">
+      <ActionWrapper className="w-96">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">Network actions</h2>
           <button
@@ -50,7 +51,7 @@ export function NetworkModal({
             onSuccess={(network) => onAddNetwork(network)}
           />
         </div>
-      </div>
+      </ActionWrapper>
     </div>
   );
 }

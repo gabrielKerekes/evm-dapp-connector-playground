@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { ActionWrapper } from "./ActionWrapper";
 
 type LogEntry = {
   type: string;
@@ -12,11 +13,7 @@ type LogsContainerProps = {
   className?: string;
 };
 
-export const LogsContainer = ({
-  logs,
-  title = "Logs",
-  className = "",
-}: LogsContainerProps) => {
+export const LogsContainer = ({ logs, title = "Logs" }: LogsContainerProps) => {
   const logsContainerRef = useRef<HTMLDivElement>(null);
 
   // Effect to scroll to bottom whenever logs change
@@ -28,7 +25,7 @@ export const LogsContainer = ({
   }, [logs]);
 
   return (
-    <div className={`p-4 bg-gray-50 rounded-lg w-full ${className}`}>
+    <ActionWrapper className="w-full">
       <h3 className="text-lg font-bold">{title}</h3>
       <div
         ref={logsContainerRef}
@@ -41,6 +38,6 @@ export const LogsContainer = ({
           </div>
         ))}
       </div>
-    </div>
+    </ActionWrapper>
   );
 };

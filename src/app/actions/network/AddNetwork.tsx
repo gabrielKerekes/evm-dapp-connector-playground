@@ -4,6 +4,7 @@ import { Button } from "../../components/Button";
 import { Input } from "@/app/components/Input";
 import { useEffect, useState } from "react";
 import { NetworkSelect } from "./NetworkSelect";
+import { ActionWrapper } from "@/app/components/ActionWrapper";
 
 type AddNetworkProps = {
   network: NetworkParams;
@@ -63,7 +64,7 @@ export const AddNetwork = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 bg-gray-50 rounded-lg">
+    <ActionWrapper>
       <h3 className="text-lg font-bold">Add network</h3>
       <NetworkSelect
         network={newNetworkParams}
@@ -105,6 +106,6 @@ export const AddNetwork = ({
         onClick={handleAddNetwork}
         disabled={!provider}
       />
-    </div>
+    </ActionWrapper>
   );
 };
