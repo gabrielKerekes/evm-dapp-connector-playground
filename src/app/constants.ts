@@ -30,9 +30,22 @@ export const chainPresets = {
       decimals: 18,
       symbol: "ETH",
     },
-    blockExplorerUrls: ["https://etherescan.io"],
+    blockExplorerUrls: ["https://etherscan.io"],
     iconUrls: [],
     usdcAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+  },
+  "eth-sepolia": {
+    chainId: "0xaa36a7",
+    rpcUrls: ["https://ethereum-sepolia-rpc.publicnode.com"],
+    chainName: "Ethereum - Sepolia",
+    nativeCurrency: {
+      name: "ETH",
+      decimals: 18,
+      symbol: "ETH",
+    },
+    blockExplorerUrls: ["https://sepolia.etherscan.io"],
+    iconUrls: [],
+    usdcAddress: "0xf08A50178dfcDe18524640EA6618a1f965821715",
   },
   arbitrumOne: {
     chainId: "0xa4b1",
@@ -46,6 +59,19 @@ export const chainPresets = {
     blockExplorerUrls: ["https://arbiscan.io"],
     iconUrls: [],
     usdcAddress: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+  },
+  binanceSmartChain: {
+    chainId: "0x38",
+    rpcUrls: ["https://binance.llamarpc.com"],
+    chainName: "Binance Smart Chain",
+    nativeCurrency: {
+      name: "BNB",
+      decimals: 18,
+      symbol: "BNB",
+    },
+    blockExplorerUrls: ["https://bscscan.com"],
+    iconUrls: [],
+    usdcAddress: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
   },
   mode: {
     chainId: "0x868b",

@@ -8,10 +8,10 @@ import { NetworkModal } from "./actions/network/NetworkModal";
 import { GithubIcon } from "./components/icons/GithubIcon";
 import { TwitterIcon } from "./components/icons/TwitterIcon";
 import { NufiIcon } from "./components/icons/NufiIcon";
-import { ApproveToken } from "./actions/ApproveToken";
+import { ApproveToken, ExecuteBatch } from "./actions";
 import { LogsContainer } from "./components/LogsContainer";
 import { AddNetwork, SwitchNetwork } from "./actions/network";
-import { GetAccounts } from "./actions/GetAccounts";
+import { AccountActions } from "./actions/AccountActions";
 import { ActionWrapper } from "./components/ActionWrapper";
 
 const getProvider = () => {
@@ -135,7 +135,7 @@ export default function Home() {
               addLog={addLog}
               onSuccess={setCurrentNetwork}
             />
-            <GetAccounts
+            <AccountActions
               provider={browserProvider}
               addLog={addLog}
               setResult={setResult}
@@ -147,14 +147,23 @@ export default function Home() {
               addLog={addLog}
               setResult={setResult}
             />
+            <ExecuteBatch
+              network={currentNetwork}
+              provider={browserProvider}
+              address={connectedAccount}
+              addLog={addLog}
+              setResult={setResult}
+            />
           </div>
-
-          <LogsContainer logs={logs} />
-
-          <ActionWrapper className="w-full">
-            <h3 className="text-lg font-bold">Result</h3>
-            <pre className="mt-2">{JSON.stringify(result, null, 2)}</pre>
-          </ActionWrapper>
+          <div className="grid grid-cols-2 w-full gap-4">
+            <LogsContainer logs={logs} />
+            <ActionWrapper className="w-full">
+              <h3 className="text-lg font-bold">Result</h3>
+              <pre className="mt-2 break-all whitespace-pre-wrap">
+                {JSON.stringify(result, null, 2)}
+              </pre>
+            </ActionWrapper>
+          </div>
         </main>
         <footer className="flex gap-6 flex-wrap items-center justify-center p-4 bg-gray-100 dark:bg-gray-900">
           <a
