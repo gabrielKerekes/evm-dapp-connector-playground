@@ -175,7 +175,7 @@ export default function Home() {
             <NufiIcon />
           </a>
           <a
-            href="#"
+            href="https://github.com/gabrielKerekes/evm-dapp-connector-playground"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-600 hover:text-gray-900"
