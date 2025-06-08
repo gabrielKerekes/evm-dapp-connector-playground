@@ -67,7 +67,7 @@ export default function Home() {
     }
 
     const accounts = await provider.enable();
-    setConnectedAccount(accounts[0]);
+    setConnectedAccount(ethers.getAddress(accounts[0]));
 
     provider.on("chainChanged", onChainChanged);
     provider.on("accountsChanged", onAccountsChanged);
