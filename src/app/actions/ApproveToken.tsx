@@ -79,12 +79,10 @@ export const ApproveToken = ({
         value={token}
         onChange={setToken}
       />
-      <Input
-        label="Spender (defaults to wallet address)"
-        value={spender}
-        onChange={setSpender}
-      />
-      <Input label="Approval Amount" value={amount} onChange={setAmount} />
+      <div className="flex flex-row gap-2">
+        <Input label="Spender" value={spender} onChange={setSpender} />
+        <Input label="Approval Amount" value={amount} onChange={setAmount} />
+      </div>
       <Button label="Approve" onClick={() => approve()} disabled={!provider} />
       {explorerLink && (
         <a

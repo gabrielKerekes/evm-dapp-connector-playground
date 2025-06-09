@@ -70,37 +70,41 @@ export const AddNetwork = ({
         network={newNetworkParams}
         onChange={setNewNetworkParams}
       />
-      <Input
-        label="Chain ID"
-        value={newNetworkParams.chainId}
-        onChange={(value) =>
-          setNewNetworkParams({ ...newNetworkParams, chainId: value })
-        }
-      />
-      <Input
-        label="Chain Name"
-        value={newNetworkParams.chainName}
-        onChange={(value) =>
-          setNewNetworkParams({ ...newNetworkParams, chainName: value })
-        }
-      />
-      <Input
-        label="RPC URL"
-        value={newNetworkParams.rpcUrls[0]}
-        onChange={(value) =>
-          setNewNetworkParams({ ...newNetworkParams, rpcUrls: [value] })
-        }
-      />
-      <Input
-        label="Block Explorer URL"
-        value={newNetworkParams.blockExplorerUrls[0]}
-        onChange={(value) =>
-          setNewNetworkParams({
-            ...newNetworkParams,
-            blockExplorerUrls: [value],
-          })
-        }
-      />
+      <div className="flex flex-row gap-2">
+        <Input
+          label="Chain ID"
+          value={newNetworkParams.chainId}
+          onChange={(value) =>
+            setNewNetworkParams({ ...newNetworkParams, chainId: value })
+          }
+        />
+        <Input
+          label="Chain Name"
+          value={newNetworkParams.chainName}
+          onChange={(value) =>
+            setNewNetworkParams({ ...newNetworkParams, chainName: value })
+          }
+        />
+      </div>
+      <div className="flex flex-row gap-2">
+        <Input
+          label="RPC URL"
+          value={newNetworkParams.rpcUrls[0]}
+          onChange={(value) =>
+            setNewNetworkParams({ ...newNetworkParams, rpcUrls: [value] })
+          }
+        />
+        <Input
+          label="Block Explorer URL"
+          value={newNetworkParams.blockExplorerUrls[0]}
+          onChange={(value) =>
+            setNewNetworkParams({
+              ...newNetworkParams,
+              blockExplorerUrls: [value],
+            })
+          }
+        />
+      </div>
       <Button
         label="Add Network"
         onClick={handleAddNetwork}

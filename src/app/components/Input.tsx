@@ -6,7 +6,7 @@ interface InputProps {
 
 export function Input({ label, value, onChange }: InputProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full">
       <label className="text-sm font-bold text-gray-900 dark:text-gray-100">
         {label}
       </label>

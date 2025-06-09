@@ -111,22 +111,25 @@ export const AccountActions = ({
             onClick={() => getAccounts()}
             disabled={!provider}
           />
-          <Input
-            label="New Delegate Address"
-            value={newDelegateAddress}
-            onChange={(value) => setNewDelegateAddress(value)}
-          />
-          <Button
-            label="Delegate"
-            onClick={() => delegate(newDelegateAddress)}
-            disabled={!provider}
-          />
+          <div className="flex flex-row gap-2 items-end">
+            <Input
+              label="New Delegate Address"
+              value={newDelegateAddress}
+              onChange={(value) => setNewDelegateAddress(value)}
+            />
+            <Button
+              label="Delegate"
+              onClick={() => delegate(newDelegateAddress)}
+              disabled={!provider}
+            />
+          </div>
           <Button
             label="Revoke Delegate"
             onClick={() =>
               delegate("0x0000000000000000000000000000000000000000")
             }
             disabled={!provider || !currentDelegate}
+            level="danger"
           />
         </>
       )}
