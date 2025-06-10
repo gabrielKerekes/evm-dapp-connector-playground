@@ -74,7 +74,6 @@ export const ExecuteBatch = ({
       amount: "0x1bc16d674ec80000",
     },
   ]);
-  const [atomicRequired, setAtomicRequired] = useState<boolean>(true);
   const [explorerLink, setExplorerLink] = useState<string>("");
 
   const executeBatch = async () => {
@@ -91,7 +90,7 @@ export const ExecuteBatch = ({
         version: "2.0.0",
         from: address,
         chainId: network.chainId,
-        atomicRequired,
+        atomicRequired: true,
         calls: calls.map((call) => ({
           to: call.to,
           data: call.data.length > 2 ? call.data : undefined,
@@ -170,17 +169,7 @@ export const ExecuteBatch = ({
 
   return (
     <ActionWrapper className="flex-4">
-      <h3 className="text-lg font-bold">Execute Batch</h3>
-
-      <div className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          id="atomicRequired"
-          checked={atomicRequired}
-          onChange={(e) => setAtomicRequired(e.target.checked)}
-        />
-        <label htmlFor="atomicRequired">Atomic Execution Required</label>
-      </div>
+      <h3 className="text-lg font-bold">wallet_sendCalls</h3>
 
       {calls.map((call, index) => (
         <div key={index} className="flex flex-col gap-2 p-4 border rounded-lg">
