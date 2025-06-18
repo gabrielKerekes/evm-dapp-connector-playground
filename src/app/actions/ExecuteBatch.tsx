@@ -57,21 +57,37 @@ export const ExecuteBatch = ({
   setResult,
 }: ExecuteBatchProps) => {
   const [calls, setCalls] = useState<Call[]>([
+    // {
+    //   type: "APPROVE_TOKEN",
+    //   to: "0x5A3B31EF4dF22368A0B8cc64345a3063266A7BB4",
+    //   data: APPROVE_DATA,
+    //   value: "0x0",
+    //   spender: "0xc336049dd72094d2e4c6ed7aeff5d372c493f7f3",
+    //   amount: "0x754d4c0",
+    // },
+    // {
+    //   type: "TRANSFER_TOKEN",
+    //   to: "0x5A3B31EF4dF22368A0B8cc64345a3063266A7BB4",
+    //   data: TRANSFER_DATA,
+    //   value: "0x0",
+    //   recipient: "0xb215e81415c308206173e64952a4dd369099c4cf",
+    //   amount: "0x1bc16d674ec80000",
+    // },
     {
-      type: "APPROVE_TOKEN",
-      to: "0x5A3B31EF4dF22368A0B8cc64345a3063266A7BB4",
-      data: APPROVE_DATA,
-      value: "0x0",
+      type: "RAW_DATA",
+      to: "0x637376a6163916a72b65625e52992555A0d242f5",
+      data: "",
+      value: "0x01",
       spender: "0xc336049dd72094d2e4c6ed7aeff5d372c493f7f3",
-      amount: "0x754d4c0",
+      amount: "",
     },
     {
-      type: "TRANSFER_TOKEN",
-      to: "0x5A3B31EF4dF22368A0B8cc64345a3063266A7BB4",
-      data: TRANSFER_DATA,
-      value: "0x0",
-      recipient: "0xb215e81415c308206173e64952a4dd369099c4cf",
-      amount: "0x1bc16d674ec80000",
+      type: "RAW_DATA",
+      to: "0x36412ec6F6C4796F65Ee6e80E3FFA367070c0f9d",
+      data: "",
+      value: "0x02",
+      spender: "0xc336049dd72094d2e4c6ed7aeff5d372c493f7f3",
+      amount: "",
     },
   ]);
   const [explorerLink, setExplorerLink] = useState<string>("");
