@@ -51,25 +51,9 @@ export const ExecuteBatch = ({
   setResult,
 }: ExecuteBatchProps) => {
   const [calls, setCalls] = useState<Call[]>([
-    // {
-    //   type: "APPROVE_TOKEN",
-    //   to: "0x5A3B31EF4dF22368A0B8cc64345a3063266A7BB4",
-    //   data: APPROVE_DATA,
-    //   value: "0x0",
-    //   spender: "0xc336049dd72094d2e4c6ed7aeff5d372c493f7f3",
-    //   amount: "0x754d4c0",
-    // },
-    // {
-    //   type: "TRANSFER_TOKEN",
-    //   to: "0x5A3B31EF4dF22368A0B8cc64345a3063266A7BB4",
-    //   data: TRANSFER_DATA,
-    //   value: "0x0",
-    //   recipient: "0xb215e81415c308206173e64952a4dd369099c4cf",
-    //   amount: "0x1bc16d674ec80000",
-    // },
     {
       type: "RAW_DATA",
-      to: "0x637376a6163916a72b65625e52992555A0d242f5",
+      to: "0x1A60a8b3Bd88f9f6b08e5d5b68a0CC8Bcae0d483",
       data: "",
       value: "0x01",
       spender: "0xc336049dd72094d2e4c6ed7aeff5d372c493f7f3",
@@ -77,7 +61,7 @@ export const ExecuteBatch = ({
     },
     {
       type: "RAW_DATA",
-      to: "0x36412ec6F6C4796F65Ee6e80E3FFA367070c0f9d",
+      to: "0x8CE5572E4947fDd3A6Eb8b1E0d256F7aA9A897AA",
       data: "",
       value: "0x02",
       spender: "0xc336049dd72094d2e4c6ed7aeff5d372c493f7f3",
