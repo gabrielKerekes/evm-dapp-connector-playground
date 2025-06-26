@@ -35,12 +35,6 @@ const generateTransferData = (recipient: string, amount: string): string => {
   return iface.encodeFunctionData("transfer", [recipient, amount]);
 };
 
-// test data
-const APPROVE_DATA =
-  "0x095ea7b3000000000000000000000000c336049dd72094d2e4c6ed7aeff5d372c493f7f3000000000000000000000000000000000000000000000000000000000754d4c0";
-const TRANSFER_DATA =
-  "0xa9059cbb000000000000000000000000b215e81415c308206173e64952a4dd369099c4cf0000000000000000000000000000000000000000000000001bc16d674ec80000";
-
 type ExecuteBatchProps = {
   network: NetworkParams;
   provider: ethers.BrowserProvider | null;
