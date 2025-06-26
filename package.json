@@ -12,9 +12,7 @@
     "deploy": "gh-pages -d out"
   },
   "dependencies": {
-    "@reown/appkit": "^1.7.10",
-    "@reown/appkit-adapter-ethers": "^1.7.10",
-    "ethers": "^6.14.4",
+    "ethers": "^6.14.0",
     "next": "15.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
