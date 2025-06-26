@@ -198,7 +198,7 @@ export const ExecuteBatch = ({
           </div>
 
           <Input
-            label="Token Contract Address"
+            label="To"
             value={call.to}
             onChange={(value) => updateCall(index, "to", value)}
           />
