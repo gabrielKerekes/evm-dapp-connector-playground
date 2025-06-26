@@ -69,6 +69,7 @@ export const ExecuteBatch = ({
     },
   ]);
   const [explorerLink, setExplorerLink] = useState<string>("");
+  const [transactionHash, setTransactionHash] = useState<string>("");
 
   const executeBatch = async () => {
     setExplorerLink("");
@@ -106,6 +107,8 @@ export const ExecuteBatch = ({
         network.blockExplorerUrls?.length > 0
           ? `${network.blockExplorerUrls[0]}/tx/${result.id}`
           : "N/A";
+
+      setTransactionHash(result.id);
       setExplorerLink(explorerLink);
       setResult("Batch transaction submitted");
     } catch (error: any) {
@@ -268,6 +271,12 @@ export const ExecuteBatch = ({
         >
           View transaction on explorer
         </a>
+      )}
+
+      {transactionHash && (
+        <div className="mt-2 text-sm text-gray-600">
+          Transaction Hash: {transactionHash}
+        </div>
       )}
     </ActionWrapper>
   );
