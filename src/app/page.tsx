@@ -36,14 +36,27 @@ export default function Home() {
 
   const onChainChanged = (message: string) => {
     addLog({ type: "event: chainChanged", message });
+
+    const newChain = Object.values(chainPresets).find(
+      (chain) => chain.chainId === message
+    );
+    if (newChain) {
+      setCurrentNetwork(newChain);
+    }
   };
 
-  const onAccountsChanged = (message: string) => {
+  const onAccountsChanged = (message: string[]) => {
     addLog({ type: "event: accountsChanged", message });
+
+    const account = ethers.getAddress(message[0]);
+    console.log("account", account);
+    setConnectedAccount(account);
   };
 
   const onDisconnect = (message: string) => {
     addLog({ type: "event: disconnect", message });
+    setConnectedAccount("");
+    setBrowserProvider(null);
   };
 
   const onConnect = (message: string) => {
@@ -65,6 +78,7 @@ export default function Home() {
       provider.removeListener("disconnect", onDisconnect);
       provider.removeListener("connect", onConnect);
     }
+    setBrowserProvider(new ethers.BrowserProvider(provider));
 
     const accounts = await provider.enable();
     setConnectedAccount(ethers.getAddress(accounts[0]));
