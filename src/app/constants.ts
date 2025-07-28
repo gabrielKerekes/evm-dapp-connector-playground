@@ -229,4 +229,17 @@ export const chainPresets = {
     iconUrls: [],
     usdcAddress: "0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9",
   },
+  flowEvm: {
+    chainId: "0x2EB",
+    rpcUrls: ["https://mainnet.evm.nodes.onflow.org"],
+    chainName: "Flow EVM",
+    nativeCurrency: {
+      name: "FLOW",
+      decimals: 18,
+      symbol: "FLOW",
+    },
+    blockExplorerUrls: ["https://evm.flowscan.io"],
+    iconUrls: [],
+    usdcAddress: "0x7f27352D5F83Db87a5A3E00f4B07Cc2138D8ee52",
+  },
 } as const satisfies Record<string, NetworkParams>;
