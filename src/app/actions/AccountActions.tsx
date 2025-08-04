@@ -71,11 +71,12 @@ export const AccountActions = ({
           data: "0x",
           authorizationList: [
             {
-              // chainId should be filled by wallet
-              chainId: 0,
+              chainId: `0x${(
+                await provider.getNetwork()
+              ).chainId.toString(16)}`,
               address: delegateAddress,
               // txNonce should be filled by wallet
-              txNonce: 0,
+              txNonce: "0x0",
             },
           ],
         },
