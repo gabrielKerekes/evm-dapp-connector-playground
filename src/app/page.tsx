@@ -8,7 +8,7 @@ import { NetworkModal } from "./actions/network/NetworkModal";
 import { GithubIcon } from "./components/icons/GithubIcon";
 import { TwitterIcon } from "./components/icons/TwitterIcon";
 import { NufiIcon } from "./components/icons/NufiIcon";
-import { ApproveToken, ExecuteBatch, WalletStatus } from "./actions";
+import { ApproveToken, ExecuteBatch, WalletStatus, TransferETH, TransferToken } from "./actions";
 import { LogsContainer } from "./components/LogsContainer";
 import { AddNetwork, SwitchNetwork } from "./actions/network";
 import { AccountActions } from "./actions/AccountActions";
@@ -151,6 +151,20 @@ export default function Home() {
             />
             <AccountActions
               provider={browserProvider}
+              addLog={addLog}
+              setResult={setResult}
+            />
+            <TransferETH
+              network={currentNetwork}
+              provider={browserProvider}
+              address={connectedAccount}
+              addLog={addLog}
+              setResult={setResult}
+            />
+            <TransferToken
+              network={currentNetwork}
+              provider={browserProvider}
+              address={connectedAccount}
               addLog={addLog}
               setResult={setResult}
             />

@@ -4,6 +4,7 @@ export const erc20Abi = [
   "function decimals() public view returns (uint8)",
   "function totalSupply() public view returns (uint256)",
   "function approve(address _spender, uint256 _value) public returns (bool success)",
+  "function transfer(address _to, uint256 _value) public returns (bool success)",
 ];
 
 export type NetworkParams = {
